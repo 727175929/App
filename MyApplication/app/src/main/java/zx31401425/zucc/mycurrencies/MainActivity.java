@@ -1,16 +1,19 @@
 package zx31401425.zucc.mycurrencies;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,7 +32,10 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
+
+import static zx31401425.zucc.mycurrencies.SplashActivity.KEY_ARRAYLIST;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Button mCalcButton;
@@ -47,13 +53,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final DecimalFormat DECIMAL_FORMAT = new
             DecimalFormat("#,##0.00000");
 
+    private MyDatabaseHelper dbHelper;
+    private List<Data> dataList = new ArrayList<Data>();
+    private List<String> list1 = new ArrayList<String>();
+    private List<String> list2 = new ArrayList<String>();
+    private Spinner mySpinner1;
+    private Spinner mySpinner2;
+    private ArrayAdapter<String> adapter1;
+    private ArrayAdapter<String> adapter2;
+    String s1 = "all";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dbHelper = new MyDatabaseHelper(this, "DateBase", null, 1);  //第二个参数为数据库名
+        dbHelper.getWritableDatabase();//创建数据库
+
         ArrayList<String> arrayList=((ArrayList<String>)
-                getIntent().getSerializableExtra(SplashActivity.KEY_ARRAYLIST));
+                getIntent().getSerializableExtra(KEY_ARRAYLIST));
         Collections.sort(arrayList);
         mCurrencies=arrayList.toArray(new String[arrayList.size()]);
 
@@ -91,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
                 new CurrencyConverterTask().execute(URL_BASE+mKey);
+
             }
         });
         mKey = getKey("open_key");
@@ -105,6 +126,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 break;
             case R.id.mnu_codes:
                 launchBrowser(SplashActivity.URL_CODES);
+                break;
+            case R.id.mnu_record:
+               //跳转到记录的界面
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this,RecordActivity.class);
+                MainActivity.this.startActivity(intent);
                 break;
             case R.id.mnu_exit:
                 finish();
@@ -245,6 +272,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     dCalculated = Double.parseDouble(strAmount) * jsonRates.getDouble(strHomCode)
                             / jsonRates.getDouble(strForCode) ;
                 }
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                ContentValues values = new ContentValues();
+                values.put("foregin", strForCode);
+                values.put("home", strHomCode);
+                values.put("num", Double.parseDouble(strAmount));
+                values.put("forenum",dCalculated);
+                db.insert("datebase", null, values);
             } catch (JSONException e) {
                 Toast.makeText(
                         MainActivity.this,
@@ -259,5 +293,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         }
     }
-
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 }

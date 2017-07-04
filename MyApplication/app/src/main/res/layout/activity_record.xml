@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/black"
+    android:orientation="vertical">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="foregin"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="home"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="fore_num"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="home_num"
+            android:textColor="@color/white"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+
+        <Spinner
+            android:id = "@+id/Spinner_foregin"
+            android:layout_width = "100dp"
+            android:layout_height ="wrap_content"
+            android:backgroundTint="@color/white"
+            android:layout_weight="0.01">
+        </Spinner >
+
+        <Spinner
+            android:id = "@+id/Spinner_home"
+            android:layout_width = "100dp"
+            android:backgroundTint="@color/white"
+            android:layout_height ="wrap_content" >
+        </Spinner >
+
+    </LinearLayout>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/list_view">
+    </ListView>
+
+</LinearLayout>
