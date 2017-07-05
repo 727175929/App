@@ -125,13 +125,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 invertCurrencies();
                 break;
             case R.id.mnu_codes:
-                launchBrowser(SplashActivity.URL_CODES);
+                launchBrowser(SplashActivity.URL_CODES);   //打开一个JSON数据
                 break;
             case R.id.mnu_record:
-               //跳转到记录的界面
+                //跳转到记录的界面
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this,RecordActivity.class);
                 MainActivity.this.startActivity(intent);
+                break;
+            case R.id.mnu_rate:
+                //跳转到记录的界面
+                Intent intent2 = new Intent();
+                intent2.setClass(MainActivity.this,RateActivity.class);
+                MainActivity.this.startActivity(intent2);
                 break;
             case R.id.mnu_exit:
                 finish();
@@ -161,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
     private void invertCurrencies() {
-        int nFor = mForSpinner.getSelectedItemPosition();
+        int nFor = mForSpinner.getSelectedItemPosition();    //汇率反转
         int nHom = mHomSpinner.getSelectedItemPosition();
         mForSpinner.setSelection(nHom);
         mHomSpinner.setSelection(nFor);
@@ -293,6 +299,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         }
     }
+
+
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
