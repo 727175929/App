@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +49,8 @@ public class RateActivity extends AppCompatActivity {
     double[] score= {6.801939,6.801939,6.801939,6.801939,6.801939,6.801939,6.801939,6.801839,6.8020000,6.801839};//图表的数据点
     private List<PointValue> mPointValues = new ArrayList<PointValue>();
     private List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
+    private int i = 0;
+    private int TIME = 20000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,8 @@ public class RateActivity extends AppCompatActivity {
         getAxisXLables();//获取x轴的标注
         getAxisPoints();//获取坐标点
         initLineChart();//初始化
+
+
         rate_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +72,22 @@ public class RateActivity extends AppCompatActivity {
         });
         mKey = getKey("open_key");
 
+        CountDownTimer cdt = new CountDownTimer(1000000, 10000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                new RateActivity.CurrencyConverterTask().execute(URL_BASE+mKey);
+            }
+            @Override
+            public void onFinish() {
+
+            }
+        };
+
+        cdt.start();
+
     }
+
+
     private String getKey(String keyName){
         AssetManager assetManager = this.getResources().getAssets();
         Properties properties = new Properties();
@@ -201,7 +221,7 @@ public class RateActivity extends AppCompatActivity {
     }
 
     private void insert(int i,double s){
-        mAxisXValues.add(new AxisValue(i).setLabel(String.valueOf(i)));
+        mAxisXValues.add(new AxisValue(i).setLabel(String.valueOf(i+1)));
         mPointValues.add(new PointValue(i, (float)s));
         initLineChart();
     }

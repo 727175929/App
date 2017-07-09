@@ -110,6 +110,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mCalcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String strAmount = mAmountEditText.getText().toString();
+                if(strAmount.length()==0){
+                    Toast.makeText(MainActivity.this, "数据不能为空", Toast.LENGTH_SHORT).show();
+                }
+                else
                 new CurrencyConverterTask().execute(URL_BASE+mKey);
 
             }
@@ -288,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             } catch (JSONException e) {
                 Toast.makeText(
                         MainActivity.this,
-                        "There's been a JSON exception: " + e.getMessage(),
+                        "There's been a exception: " + e.getMessage(),
                         Toast.LENGTH_LONG
                 ).show();
                 mConvertedTextView.setText("");
