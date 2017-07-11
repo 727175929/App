@@ -27,6 +27,12 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/mnu_map"
+        android:orderInCategory="300"
+        android:title="map"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/mnu_exit"
         android:orderInCategory="300"
         android:title="exit"

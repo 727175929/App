@@ -138,6 +138,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 intent.setClass(MainActivity.this,RecordActivity.class);
                 MainActivity.this.startActivity(intent);
                 break;
+            case R.id.mnu_map:
+                //跳转到记录的界面
+                Intent intent1 = new Intent();
+                intent1.setClass(MainActivity.this,MapActivity.class);
+                MainActivity.this.startActivity(intent1);
+                break;
             case R.id.mnu_rate:
                 //跳转到记录的界面
                 Intent intent2 = new Intent();

@@ -4,6 +4,15 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     android { useLibrary 'org.apache.http.legacy' }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+    sourceSets{
+        main{
+            jniLibs.srcDirs = ['libs']
+        }
+    }
     defaultConfig {
         applicationId "zx31401425.zucc.mycurrencies"
         minSdkVersion 16
