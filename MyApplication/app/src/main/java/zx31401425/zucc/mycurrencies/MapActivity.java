@@ -16,6 +16,7 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class MapActivity extends Activity {
         setContentView(R.layout.activity_map);
         mapView = (MapView) findViewById(R.id.bmapView);
         baiduMap = mapView.getMap();
+        baiduMap.setMyLocationEnabled(true);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //获得所用的位置提供器
         List<String> providerList = locationManager.getProviders(true);
@@ -78,6 +80,11 @@ public class MapActivity extends Activity {
             baiduMap.animateMapStatus(update);
             isFirstLocaye = false;
         }
+        MyLocationData.Builder locationBuilder = new MyLocationData.Builder();
+        locationBuilder.latitude(location.getLatitude());
+        locationBuilder.longitude(location.getLongitude());
+        MyLocationData locationData = locationBuilder.build();
+        baiduMap.setMyLocationData(locationData);
     }
     LocationListener locationListener = new LocationListener() {
         @Override
@@ -107,6 +114,7 @@ public class MapActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        baiduMap.setMyLocationEnabled(false);
         mapView.onDestroy();
         if(locationManager != null){
             locationManager.removeUpdates(locationListener);
