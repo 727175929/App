@@ -1,6 +1,9 @@
 package zx31401425.zucc.mycurrencies;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.graphics.Color;
@@ -8,6 +11,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -36,6 +41,7 @@ import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
 public class RateActivity extends AppCompatActivity {
+    private TextView textView;
     private String mKey;
     public static final String RATES="rates";
     public static final String URL_BASE =
@@ -51,12 +57,14 @@ public class RateActivity extends AppCompatActivity {
     private List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
     private int i = 0;
     private int TIME = 20000;
+    NotificationManager manager;
+    int notification_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate);
         Button rate_button = (Button) findViewById(R.id.button_rate);
-
+        textView = (TextView) findViewById(R.id.text_rate);
         lineChart = (LineChartView)findViewById(R.id.line_chart);
         getAxisXLables();//获取x轴的标注
         getAxisPoints();//获取坐标点
@@ -84,9 +92,57 @@ public class RateActivity extends AppCompatActivity {
         };
 
         cdt.start();
+        manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Button change = (Button) findViewById(R.id.button_change);
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textView.setText("2");
+            }
 
+        });
+        textView.addTextChangedListener(textWatcher);
     }
+    private TextWatcher textWatcher = new TextWatcher() {
 
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            getNotification(String.valueOf(textView.getText()));
+        }
+    }; //改变的监听器
+
+    void getNotification(String s){
+        Notification.Builder builder = new Notification.Builder(RateActivity.this);
+        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setTicker("World");
+        builder.setWhen(System.currentTimeMillis());
+        builder.setContentTitle("当前汇率");
+        builder.setContentText("目前的1美元可以兑换"+s+"人民币");
+
+//        Intent intent = new Intent(RateActivity.this, Activity.class);
+//        PendingIntent ma = PendingIntent.getActivity(RateActivity.this,0,intent,0);
+//        builder.setContentIntent(ma);//设置点击过后跳转的activity
+
+                /*builder.setDefaults(Notification.DEFAULT_SOUND);//设置声音
+                builder.setDefaults(Notification.DEFAULT_LIGHTS);//设置指示灯
+                builder.setDefaults(Notification.DEFAULT_VIBRATE);//设置震动*/
+        //    提示音，闪光灯，震动效果需要添加权限 : <uses-permission android:name="android.permission.VIBRATE"> </uses-permission>
+        builder.setDefaults(Notification.DEFAULT_ALL);//设置全部
+
+        Notification notification = builder.build();//4.1以上用.build();
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;// 点击通知的时候cancel掉
+        manager.notify(notification_id,notification);
+    }
 
     private String getKey(String keyName){
         AssetManager assetManager = this.getResources().getAssets();
@@ -136,7 +192,6 @@ public class RateActivity extends AppCompatActivity {
                 }
                 JSONObject jsonRates = jsonObject.getJSONObject(RATES);
                 dCalculated = jsonRates.getDouble("CNY") ;
-                TextView textView = (TextView)findViewById(R.id.text_rate);
                 textView.setText(String.valueOf(dCalculated));
                 insert(num,dCalculated);
                 num++;
