@@ -41,7 +41,7 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
 
         <activity android:name=".MainActivity" />
         <activity android:name=".SplashActivity">
@@ -57,13 +57,21 @@
             android:name=".MapActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="定位"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".ShareActivity"></activity>
 
+        <receiver
+            android:name=".AppRegister"
+            android:permission="com.tencent.mm.plugin.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

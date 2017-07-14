@@ -36,7 +36,7 @@ public class RecordActivity extends AppCompatActivity {
         listView.setAdapter(apdater);
 
         init();//数据库中导入数据到LIST中
-        apdater.notifyDataSetChanged(); //更新LIST
+        apdater.notifyDataSetChanged(); //马上更新LIST函数
         init2();//更新下拉列表
 
         mySpinner1 = (Spinner) findViewById(R.id.Spinner_foregin);
@@ -54,9 +54,9 @@ public class RecordActivity extends AppCompatActivity {
                 Toast.makeText(RecordActivity.this, ("您选择的是：" + adapter1.getItem(arg2)), Toast.LENGTH_LONG).show();
                 if(!adapter1.getItem(arg2).equals("all")){
                     s1=adapter1.getItem(arg2);
-                    init3(adapter1.getItem(arg2));
+                    init3(adapter1.getItem(arg2));  //添加第二个下拉
                     mySpinner2.setAdapter(adapter2);
-                    checkforegin( adapter1.getItem(arg2));
+                    checkforegin( adapter1.getItem(arg2));  //查找第一个条件之后遍历
                     apdater.notifyDataSetChanged();
                 }
                 else{
@@ -88,7 +88,7 @@ public class RecordActivity extends AppCompatActivity {
                 Toast.makeText(RecordActivity.this, ("您选择的是：" + adapter2.getItem(arg2)), Toast.LENGTH_LONG).show();
                 /* 将mySpinner 显示*/
                 if(!adapter2.getItem(arg2).equals("all")){
-                    checkhome2(s1,adapter2.getItem(arg2));
+                    checkhome2(s1,adapter2.getItem(arg2));  //查找第一个条件和第二个条件之后遍历
                     apdater.notifyDataSetChanged();
                 }
                 else {
@@ -109,7 +109,7 @@ public class RecordActivity extends AppCompatActivity {
 
     }
 
-    private void init2() {
+    private void init2() {       //添加第一个下拉列表
         list1.clear();
         list1.add("all");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -124,7 +124,7 @@ public class RecordActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    private void checkforegin(String s) {
+    private void checkforegin(String s) {   //查找第一个条件之后遍历
         dataList.clear();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("datebase",null ,"foregin = ?",new String[]{s}, null, null, null);
@@ -141,7 +141,7 @@ public class RecordActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    private void init3(String s) {       //添加下拉列表
+    private void init3(String s) {       //添加第二个下拉列表
         list2.clear();
         list2.add("all");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -156,7 +156,7 @@ public class RecordActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    private void init() {
+    private void init() {    //遍历所有数据库的元素
         dataList.clear();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("datebase", null, null, null, null, null, null);
@@ -174,7 +174,7 @@ public class RecordActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    private void checkhome1(String s1) {
+    private void checkhome1(String s1) {       //遍历指定foregine  数据库中的元素
         dataList.clear();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("datebase",null ,"foregin = ?",new String[]{s1}, null, null, null);
@@ -191,7 +191,7 @@ public class RecordActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    private void checkhome2(String s1,String s) {
+    private void checkhome2(String s1,String s) {      //指定foregine之后再指定hhome  查数据库的元素
         dataList.clear();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("datebase",null ,"foregin = ? and home = ?",new String[]{s1,s}, null, null, null);

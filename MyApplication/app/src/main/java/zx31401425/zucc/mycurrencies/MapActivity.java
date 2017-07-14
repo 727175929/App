@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
+import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatusUpdate;
@@ -38,12 +39,14 @@ public class MapActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SDKInitializer.initialize(getApplicationContext()); //获取sdk的值,进行初始化，调用getApplicationContext获取全局传入
+        SDKInitializer.setCoordType(CoordType.BD09LL);
         setContentView(R.layout.activity_map);
         mapView = (MapView) findViewById(R.id.bmapView);
         baiduMap = mapView.getMap();
         baiduMap.setMyLocationEnabled(true);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //获得所用的位置提供器
+
         List<String> providerList = locationManager.getProviders(true);
         if (providerList.contains(LocationManager.GPS_PROVIDER)) {
             provider = LocationManager.GPS_PROVIDER;
@@ -76,7 +79,7 @@ public class MapActivity extends Activity {
             LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
             MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
             baiduMap.animateMapStatus(update);
-            update = MapStatusUpdateFactory.zoomTo(16f);
+            update = MapStatusUpdateFactory.zoomTo(16f);   //设置缩放级别
             baiduMap.animateMapStatus(update);
             isFirstLocaye = false;
         }

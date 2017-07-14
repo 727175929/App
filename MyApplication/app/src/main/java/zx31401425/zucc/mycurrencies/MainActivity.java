@@ -5,9 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
-import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -151,6 +149,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Intent intent2 = new Intent();
                 intent2.setClass(MainActivity.this,RateActivity.class);
                 MainActivity.this.startActivity(intent2);
+                break;
+            case R.id.mnu_share:
+                //跳转到记录的界面
+                Intent intent3 = new Intent();
+                intent3.setClass(MainActivity.this,ShareActivity.class);
+                MainActivity.this.startActivity(intent3);
                 break;
             case R.id.mnu_exit:
                 finish();

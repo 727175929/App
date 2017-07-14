@@ -80,7 +80,7 @@ public class RateActivity extends AppCompatActivity {
         });
         mKey = getKey("open_key");
 
-        CountDownTimer cdt = new CountDownTimer(1000000, 10000) {
+        CountDownTimer cdt = new CountDownTimer(1000000, 10000) {  //第一个参数表示总时间，第二个参数表示间隔时间
             @Override
             public void onTick(long millisUntilFinished) {
                 new RateActivity.CurrencyConverterTask().execute(URL_BASE+mKey);
@@ -91,7 +91,7 @@ public class RateActivity extends AppCompatActivity {
             }
         };
 
-        cdt.start();
+        cdt.start();//定时器
         manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Button change = (Button) findViewById(R.id.button_change);
         change.setOnClickListener(new View.OnClickListener() {
@@ -168,7 +168,7 @@ public class RateActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             progressDialog = new ProgressDialog(RateActivity.this);
-            progressDialog.setTitle("Calculating Result...");
+            progressDialog.setTitle("Getting Result...");
             progressDialog.setMessage("One moment please...");
             progressDialog.setCancelable(true);
             progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
@@ -193,7 +193,7 @@ public class RateActivity extends AppCompatActivity {
                 JSONObject jsonRates = jsonObject.getJSONObject(RATES);
                 dCalculated = jsonRates.getDouble("CNY") ;
                 textView.setText(String.valueOf(dCalculated));
-                insert(num,dCalculated);
+                insert(num,dCalculated);   //插入点和对应的数据
                 num++;
             } catch (JSONException e) {
                 Toast.makeText(
@@ -226,19 +226,19 @@ public class RateActivity extends AppCompatActivity {
     }
 
     private void initLineChart(){
-        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFCD41"));  //   ߵ   ɫ
+        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFCD41"));  //设置点的颜色
         List<Line> lines = new ArrayList<Line>();
         line.setShape(ValueShape.CIRCLE);
-        line.setCubic(false);
+        line.setCubic(false);   //曲线是否平滑，即是曲线还是折线
         LineChartValueFormatter chartValueFormatter = new SimpleLineChartValueFormatter(6);
         line.setFormatter(chartValueFormatter);//显示小数点
         line.setHasLabels(true);//曲线的数据坐标是否加上备注
 //	    line.setStrokeWidth(3);
-        line.setFilled(false);
-        line.setHasLabels(true);
+        line.setFilled(false);//是否填充曲线的面积
+        line.setHasLabels(true); //曲线的数据坐标是否加上备注
 //		line.setHasLabelsOnlyForSelected(true);/
-        line.setHasLines(true);
-        line.setHasPoints(true);
+        line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
+        line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示
         lines.add(line);
         LineChartData data = new LineChartData();
         data.setLines(lines);
@@ -263,6 +263,7 @@ public class RateActivity extends AppCompatActivity {
         axisY.setTextSize(11);
         data.setAxisYLeft(axisY);
 
+        //设置行为属性，支持缩放、滑动以及平移
         lineChart.setInteractive(true);
         lineChart.setZoomType(ZoomType.HORIZONTAL);
         lineChart.setMaxZoom((float) 3);
